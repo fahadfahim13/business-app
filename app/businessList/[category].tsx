@@ -36,8 +36,7 @@ const BusinessListByCategory = () => {
     const querySnapshot = await getDocs(q);
     let data: any[] = [];
     querySnapshot.forEach((doc) => {
-      console.log(doc.data());
-      data.push(doc.data());
+      data.push({id: doc?.id, ...doc.data()});
     });
     setBuslist(data);
     setLoading(false);
