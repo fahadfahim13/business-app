@@ -4,9 +4,11 @@ import { PRIMARY } from "@/constants/Colors";
 import { collection, getDocs, query } from "firebase/firestore";
 import { db } from "@/config/FirebaseConfig";
 import CategoryItem from "./CategoryItem";
+import { useRouter } from "expo-router";
 
 const Category = () => {
   const [catlist, setCatlist] = useState<any[]>([]);
+  const router = useRouter();
 
   useEffect(() => {
     getCategoryList();
@@ -24,7 +26,8 @@ const Category = () => {
   };
 
   const onCategoryPress = (category: any) => {
-    console.log(category.name)
+    console.log(category.name);
+    router.push(`/businessList/${category.name}`);
   }
 
   return (

@@ -32,12 +32,11 @@ export default function RootLayout() {
       publishableKey={process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY ?? ""}
     >
       <SignedIn>
-        <Stack>
+        <Stack screenOptions={{
+          headerShown: false,
+        }}>
           <Stack.Screen
             name="(tabs)"
-            options={{
-              headerShown: false,
-            }}
           />
         </Stack>
       </SignedIn>
