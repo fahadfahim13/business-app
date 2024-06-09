@@ -8,19 +8,19 @@ import { useOAuth } from "@clerk/clerk-expo";
 WebBrowser.maybeCompleteAuthSession();
 
 const LoginScreen = () => {
+  useWarmUpBrowser();
 
-    useWarmUpBrowser();
-
-
-    const { startOAuthFlow } = useOAuth({ strategy: "oauth_google" });
+  const { startOAuthFlow } = useOAuth({ strategy: "oauth_google" });
 
   const onPress = React.useCallback(async () => {
     try {
-      const { createdSessionId, signIn, signUp, setActive } =
-        await startOAuthFlow();
-        console.log({createdSessionId, signIn, signUp, setActive});
+      const res = await startOAuthFlow();
+      const { createdSessionId, signIn, signUp, setActive } = res;
+      console.log({ createdSessionId, signIn, signUp, setActive });
 
       if (createdSessionId && setActive) {
+        console.log('Logged In...')
+        console.log({createdSessionId});
         setActive({ session: createdSessionId });
       } else {
         // Use signIn or signUp for next steps such as MFA
@@ -44,7 +44,7 @@ const LoginScreen = () => {
           <Text style={styles.loginText}>Community Business Directory</Text> App
         </Text>
         <TouchableOpacity style={styles.button} onPress={onPress}>
-            <Text style={styles.buttonText}>Let's Get Started</Text>
+          <Text style={styles.buttonText}>Let's Get Started</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -55,15 +55,15 @@ const styles = StyleSheet.create({
   loginContainer: {
     backgroundColor: "#fff",
     marginTop: 20,
-    display: 'flex',
-    alignItems: 'center'
+    display: "flex",
+    alignItems: "center",
   },
   loginText: {
     color: PRIMARY,
   },
   loginFullText: {
     fontSize: 30,
-    textAlign: 'center',
+    textAlign: "center",
     fontFamily: "Inter-light",
   },
   subContainer: {
@@ -82,14 +82,14 @@ const styles = StyleSheet.create({
     marginTop: 20,
     backgroundColor: PRIMARY,
     padding: 16,
-    width: '80%',
+    width: "80%",
     borderRadius: 16,
   },
   buttonText: {
-    textAlign: 'center',
-    color: '#fff',
-    fontFamily: 'Inter-bold'
-  }
+    textAlign: "center",
+    color: "#fff",
+    fontFamily: "Inter-bold",
+  },
 });
 
 export default LoginScreen;
