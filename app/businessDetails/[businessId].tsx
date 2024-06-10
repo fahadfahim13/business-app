@@ -1,4 +1,4 @@
-import { View, Text, ActivityIndicator, StyleSheet } from "react-native";
+import { View, ActivityIndicator, StyleSheet } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useLocalSearchParams } from "expo-router";
 import { doc, getDoc } from "firebase/firestore";
@@ -7,6 +7,9 @@ import { PRIMARY } from "@/constants/Colors";
 import Intro from "@/components/BusinessDetails/Intro";
 import ActionButtons from "@/components/BusinessDetails/ActionButtons";
 import About from "@/components/BusinessDetails/About";
+import Reviews from "@/components/BusinessDetails/Reviews";
+import ParallaxScrollView from "@/components/ParallaxScrollView";
+import { ScrollView } from "react-native-virtualized-view";
 
 const BusinessDetailsFromId = () => {
   const { businessId } = useLocalSearchParams();
@@ -29,7 +32,7 @@ const BusinessDetailsFromId = () => {
     setLoading(false);
   };
   return (
-    <View>
+    <ScrollView>
       {loading ? (
         <ActivityIndicator
           size={"large"}
@@ -39,11 +42,12 @@ const BusinessDetailsFromId = () => {
       ) : (
         <View>
           <Intro business={{ id: businessId, ...details }} />
-          <ActionButtons />
-          <About />
+          <ActionButtons business={{ id: businessId, ...details }} />
+          <About business={{ id: businessId, ...details }} />
+          <Reviews business={{ id: businessId, ...details }} />
         </View>
       )}
-    </View>
+    </ScrollView>
   );
 };
 
