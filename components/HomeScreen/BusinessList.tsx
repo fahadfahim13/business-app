@@ -4,9 +4,11 @@ import { PRIMARY } from "@/constants/Colors";
 import { collection, getDocs, query } from "firebase/firestore";
 import { db } from "@/config/FirebaseConfig";
 import BusinessListItem from "./BusinessListItem";
+import { useRouter } from "expo-router";
 
 const BusinessList = () => {
   const [busList, setBuslist] = useState<any[]>([]);
+  const router = useRouter();
 
   useEffect(() => {
     getBusinessList();
@@ -17,14 +19,14 @@ const BusinessList = () => {
     const querySnapshot = await getDocs(q);
     let data: any[] = [];
     querySnapshot.forEach((doc) => {
-      console.log(doc.data());
-      data.push(doc.data());
+      data.push({...doc.data(), id: doc.id});
     });
     setBuslist(data);
   };
 
   const onBusinessClick = (business: any) => {
-    console.log(business);
+    console.log(business.id);
+    router.push('/businessDetails/'+business.id);
   };
 
   return (

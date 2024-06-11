@@ -5,9 +5,10 @@ import {
   TextInput,
   TouchableOpacity,
   ToastAndroid,
+  Image,
 } from "react-native";
 import React, { useState } from "react";
-import { Rating } from "react-native-ratings";
+import { AirbnbRating, Rating } from "react-native-ratings";
 import { Colors, PRIMARY } from "@/constants/Colors";
 import { db } from "@/config/FirebaseConfig";
 import { arrayUnion, doc, updateDoc } from "firebase/firestore";
@@ -23,44 +24,73 @@ const Reviews = (props: { business: any }) => {
   };
 
   const onSubmit = async () => {
+    const data = JSON.stringify({
+      rating: rating,
+      comment: review,
+      userId: user?.id,
+      useFullname: user?.fullName,
+      userImage: user?.imageUrl,
+      userEmail: user?.emailAddresses,
+    });
     const docRef = doc(db, "BusinessList", business?.id ?? "");
     await updateDoc(docRef, {
-      reviews: arrayUnion({
-        rating: rating,
-        comment: review,
-        userId: user?.id,
-        useFullname: user?.fullName,
-        userImage: user?.imageUrl,
-      }),
+      reviews: arrayUnion(JSON.parse(data)),
     });
-    ToastAndroid.show('Review Added Successfully!!', ToastAndroid.TOP);
+    ToastAndroid.show("Review Added Successfully!!", ToastAndroid.TOP);
+    setReview("");
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>Reviews</Text>
-      <Rating
-        imageSize={24}
-        showRating={false}
-        onFinishRating={ratingCompleted}
-        style={{ paddingVertical: 10 }}
-      />
-      <TextInput
-        placeholder="Write your review..."
-        numberOfLines={4}
-        style={styles.reviewText}
-        onChangeText={(text: string) => setReview(text)}
-      />
-      <TouchableOpacity
-        style={{
-          ...styles.submitButton,
-          backgroundColor: review !== "" ? PRIMARY : "#A3A6FF",
-        }}
-        disabled={review === ""}
-        onPress={onSubmit}
-      >
-        <Text style={styles.buttonText}>Submit</Text>
-      </TouchableOpacity>
+      <View>
+        <Rating
+          imageSize={24}
+          showRating={false}
+          jumpValue={0.5}
+          fractions={1}
+          onFinishRating={ratingCompleted}
+          style={{ paddingVertical: 10 }}
+        />
+        <TextInput
+          placeholder="Write your review..."
+          numberOfLines={4}
+          style={styles.reviewText}
+          onChangeText={(text: string) => setReview(text)}
+        />
+        <TouchableOpacity
+          style={{
+            ...styles.submitButton,
+            backgroundColor: review !== "" ? PRIMARY : "#A3A6FF",
+          }}
+          disabled={review === ""}
+          onPress={onSubmit}
+        >
+          <Text style={styles.buttonText}>Submit</Text>
+        </TouchableOpacity>
+
+        {/* Display Previous Reviews */}
+        <View style={styles.ratingListContainer}>
+          {business?.reviews?.map((item: any, index: number) => (
+            <View key={index} style={styles.ratingItemContainer}>
+              <Image
+                source={{ uri: item?.userImage }}
+                style={styles.reviewImage}
+              />
+              <View style={styles.ratingTextContainer}>
+                <Text style={styles.ratingUserName}>{item.useFullname}</Text>
+                <AirbnbRating
+                  size={16}
+                  showRating={false}
+                  defaultRating={item.rating}
+                  ratingContainerStyle={{ alignItems: 'flex-start' }}
+                />
+                <Text>{item.comment}</Text>
+              </View>
+            </View>
+          ))}
+        </View>
+      </View>
     </View>
   );
 };
@@ -94,4 +124,30 @@ const styles = StyleSheet.create({
     fontFamily: "Inter",
     fontSize: 16,
   },
+  reviewImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+  },
+  ratingListContainer: {
+    marginVertical: 12
+  },
+  ratingItemContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 8,
+    marginTop: 12,
+    borderColor: Colors.light.tabIconSelected,
+    borderWidth: 1,
+    borderRadius: 12,
+    padding: 8
+  },
+  ratingTextContainer: {
+    display: 'flex',
+    flex: 1
+  },
+  ratingUserName: {
+    fontFamily: 'Inter-bold',
+    fontSize: 16,
+  }
 });

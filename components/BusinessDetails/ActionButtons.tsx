@@ -6,6 +6,7 @@ import {
   FlatList,
   TouchableOpacity,
   Linking,
+  Share,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -73,7 +74,15 @@ const ActionButtons = (props: { business: any }) => {
   ];
 
   const onClick = (url: string) => {
-    Linking.openURL(url);
+    if(url === '') {
+      Share.share({
+        message: business?.name + '\nAddress: ' + 
+        business?.address + '\nFind out more in here: '
+        +business?.website
+      });
+    } else{
+      Linking.openURL(url);
+    }
   }
   return (
     <View style={styles.container}>
