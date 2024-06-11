@@ -6,7 +6,8 @@ import { db } from "@/config/FirebaseConfig";
 import CategoryItem from "./CategoryItem";
 import { useRouter } from "expo-router";
 
-const Category = () => {
+const Category = (props: {explore?: boolean}) => {
+  const {explore = false} = props;
   const [catlist, setCatlist] = useState<any[]>([]);
   const router = useRouter();
 
@@ -31,11 +32,11 @@ const Category = () => {
   }
 
   return (
-    <View>
-      <View style={styles.headerContainer}>
+    <View style={styles.container}>
+      {explore && <View style={styles.headerContainer}>
         <Text style={styles.mainHeader}>Category</Text>
         <Text style={styles.headerButton}>See All</Text>
-      </View>
+      </View>}
       <FlatList
         data={catlist}
         horizontal={true}
@@ -53,8 +54,12 @@ const Category = () => {
 export default Category;
 
 const styles = StyleSheet.create({
+  container: {
+    marginLeft: 20,
+  },
   headerContainer: {
     padding: 20,
+    marginLeft: -20,
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
@@ -68,6 +73,6 @@ const styles = StyleSheet.create({
     fontFamily: "Inter-light",
   },
   categoryList: {
-    marginLeft: 20,
+    marginTop: 8,
   }
 });

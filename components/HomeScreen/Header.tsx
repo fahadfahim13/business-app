@@ -66,6 +66,7 @@ const styles = StyleSheet.create({
   },
   input: {
     fontFamily: 'Inter',
-    fontSize: 16
+    fontSize: 16,
+    flex: 1
   }
 });

@@ -25,7 +25,6 @@ const BusinessList = () => {
   };
 
   const onBusinessClick = (business: any) => {
-    console.log(business.id);
     router.push('/businessDetails/'+business.id);
   };
 

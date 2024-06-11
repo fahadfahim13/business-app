@@ -13,7 +13,7 @@ const home = () => {
       {/* Slider */}
       <Slider />
       {/* Category List */}
-      <Category />
+      <Category explore={true} />
       {/* Business List */}
       <BusinessList />
     </ScrollView>
