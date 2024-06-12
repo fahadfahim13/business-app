@@ -6,8 +6,10 @@ import { db } from "@/config/FirebaseConfig";
 import CategoryItem from "./CategoryItem";
 import { useRouter } from "expo-router";
 
-const Category = (props: {explore?: boolean}) => {
-  const {explore = false} = props;
+const Category = (props: {explore?: boolean;
+  onCategorySelect?: (name: string) => void;
+}) => {
+  const {explore = false, onCategorySelect} = props;
   const [catlist, setCatlist] = useState<any[]>([]);
   const router = useRouter();
 
@@ -27,8 +29,11 @@ const Category = (props: {explore?: boolean}) => {
   };
 
   const onCategoryPress = (category: any) => {
-    console.log(category.name);
-    router.push(`/businessList/${category.name}`);
+    if(!explore) {
+      onCategorySelect?.(category.name);
+    } else{
+      router.push(`/businessList/${category.name}`);
+    }
   }
 
   return (
