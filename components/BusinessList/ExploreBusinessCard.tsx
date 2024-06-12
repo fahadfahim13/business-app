@@ -29,7 +29,6 @@ const ExploreBusinessCard = (props: { business: any }) => {
       </View>
     </View>
     
-    
     </TouchableOpacity>
   );
 };
