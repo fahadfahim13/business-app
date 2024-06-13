@@ -2,8 +2,6 @@ import LoginScreen from "@/components/LoginScreen";
 import { ClerkProvider, SignedIn, SignedOut } from "@clerk/clerk-expo";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
-import { Text } from "react-native";
-
 import * as SecureStore from "expo-secure-store";
 import { FONTS } from "@/constants/Fonts";
 
